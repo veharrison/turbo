@@ -1,3 +1,4 @@
+//Important links: https://jamboard.google.com/d/1_wFrh3Thdmngkkklwxg49of0tB76-QetAKFwNTZ_vXg/viewer?f=0
 package com.turbo;
 //https://www.geeksforgeeks.org/atlassian-interview-experience/
 //https://www.geeksforgeeks.org/level-ancestor-problem/
@@ -23,9 +24,7 @@ public class Main {
 
 
         solver(ancestors, 0);
-        Query.forEach(query -> {
-            System.out.println(DP[query.getKey()][query.getValue()]);
-        });
+        Query.forEach(query -> System.out.println(DP[query.getKey()][query.getValue()]));
 
     }
 
@@ -49,15 +48,15 @@ public class Main {
 
         int leftChild = 2*currentIndex + 1;
         int rightChild = 2*currentIndex + 2;
+        ancestors.add(0, currentIndex);
+
         if(leftChild < tree.length) {
-            ancestors.add(0, currentIndex);
             solver(ancestors, leftChild);
-            ancestors.remove(0);
         }
         if(rightChild < tree.length) {
-            ancestors.add(0, currentIndex);
             solver(ancestors, rightChild);
-            ancestors.remove(0);
         }
+        ancestors.remove(0);
+
     }
 }
