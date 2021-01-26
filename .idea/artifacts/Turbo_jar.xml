@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Turbo:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Turbo_jar</output-path>
+    <root id="archive" name="Turbo.jar">
+      <element id="module-output" name="Turbo" />
+    </root>
+  </artifact>
+</component>
