@@ -1,62 +1,68 @@
-//Important links: https://jamboard.google.com/d/1_wFrh3Thdmngkkklwxg49of0tB76-QetAKFwNTZ_vXg/viewer?f=0
 package com.turbo;
-//https://www.geeksforgeeks.org/atlassian-interview-experience/
-//https://www.geeksforgeeks.org/level-ancestor-problem/
-import javafx.util.Pair;
 
 import java.io.*;
 import java.util.*;
 
 public class Main {
-    private static int[] tree = {1,2,3,4,5,6,7,8,9,10};
 
-    private static int[][] DP = new int[tree.length][10];
+   static Integer D = 39;
+   static Integer T = 39;
+   static Integer N = 40;
+   static long[][][] DP = new long[N][N][2];
+
+    /**
+     *
+     * @param c    previous character
+     * @param count counter for same string added
+     * @param depth length of string traversed
+     * @return
+     */
+    public static Long solver(char c, int count, int depth){
+        if(depth == N){
+            return 1l;
+        }
+        if(DP[count][depth][c-'0'] != -1){
+            return DP[count][depth][c-'0'];
+        }
+
+        long left = 0;
+        long right = 0;
+
+        if(c=='0'){
+            left = D>count+1 ? solver(c, count+1, depth+1) : 0;
+            right = solver('1', 1, depth+1);
+        }
+
+        if(c == '1') {
+            left = solver('0', 1, depth+1);
+            right = T>count+1 ? solver(c, count+1, depth+1) : 0;
+        }
+
+        DP[count][depth][c-'0'] = left + right;
+
+        return DP[count][depth][c-'0'];
+    }
+
+    public static void init(){
+        for (int i = 0 ; i<DP.length ; i++){
+            for (int j = 0 ; j<DP[i].length ; j++) {
+                for (int k = 0 ; k<DP[i][j].length ; k++) {
+                    DP[i][j][k] = -1;
+                }
+            }
+        }
+    }
 
     public static void main(String[] args) {
+        init();
 
+        long left = 0 ;
+        long right = 0 ;
 
-        List<Integer> ancestors = new ArrayList<>();
+        left = solver('0', 1, 1 );
+        right = solver('1', 1, 1);
 
-        System.out.println("Enter your array elements");
-
-        List<Pair<Integer, Integer>> Query = new ArrayList<>() ;
-        Query.add(new Pair<>(6,0));
-
-
-        solver(ancestors, 0);
-        Query.forEach(query -> System.out.println(DP[query.getKey()][query.getValue()]));
-
+        System.out.println(left+right);
     }
 
-    public static void solver(List<Integer> ancestors, int currentIndex) {
-        int pos = 0;
-
-        for(int j = 0; j < ancestors.size(); j++) {
-            int e = ancestors.get(j);
-            DP[currentIndex][pos] = DP[e][pos] + tree[currentIndex];
-            pos++;
-        }
-
-        while(pos<tree.length) {
-
-            DP[currentIndex][pos] = tree[currentIndex];
-            pos++;
-        }
-        if(ancestors.size() == 10) {
-            ancestors.remove(9);
-        }
-
-        int leftChild = 2*currentIndex + 1;
-        int rightChild = 2*currentIndex + 2;
-        ancestors.add(0, currentIndex);
-
-        if(leftChild < tree.length) {
-            solver(ancestors, leftChild);
-        }
-        if(rightChild < tree.length) {
-            solver(ancestors, rightChild);
-        }
-        ancestors.remove(0);
-
-    }
 }
