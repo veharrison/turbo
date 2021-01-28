@@ -5,64 +5,31 @@ import java.util.*;
 
 public class Main {
 
-   static Integer D = 39;
-   static Integer T = 39;
-   static Integer N = 40;
-   static long[][][] DP = new long[N][N][2];
+    static char[] str = {'b', 'c', 'a'};
 
-    /**
-     *
-     * @param c    previous character
-     * @param count counter for same string added
-     * @param depth length of string traversed
-     * @return
-     */
-    public static Long solver(char c, int count, int depth){
-        if(depth == N){
-            return 1l;
-        }
-        if(DP[count][depth][c-'0'] != -1){
-            return DP[count][depth][c-'0'];
+    public static void swap(int index ){
+        int swapWith = index+1;
+
+        for (int i = str.length-1; i>index; i--){
+           if(str[index]<str[i] && str[swapWith]>str[i] ){
+               swapWith = i;
+           }
         }
 
-        long left = 0;
-        long right = 0;
-
-        if(c=='0'){
-            left = D>count+1 ? solver(c, count+1, depth+1) : 0;
-            right = solver('1', 1, depth+1);
-        }
-
-        if(c == '1') {
-            left = solver('0', 1, depth+1);
-            right = T>count+1 ? solver(c, count+1, depth+1) : 0;
-        }
-
-        DP[count][depth][c-'0'] = left + right;
-
-        return DP[count][depth][c-'0'];
-    }
-
-    public static void init(){
-        for (int i = 0 ; i<DP.length ; i++){
-            for (int j = 0 ; j<DP[i].length ; j++) {
-                for (int k = 0 ; k<DP[i][j].length ; k++) {
-                    DP[i][j][k] = -1;
-                }
-            }
-        }
+        char temp = str[index];
+        str[index] = str[swapWith];
+        str[swapWith] = temp;
     }
 
     public static void main(String[] args) {
-        init();
+        for (int i = str.length-1; i>0; i--){
+            if(str[i-1]< str[i]){
+               swap(i-1 );
+               Arrays.sort(str,i, str.length);
+               break;
+            }
+        }
 
-        long left = 0 ;
-        long right = 0 ;
-
-        left = solver('0', 1, 1 );
-        right = solver('1', 1, 1);
-
-        System.out.println(left+right);
+        System.out.println(str);
     }
-
 }
